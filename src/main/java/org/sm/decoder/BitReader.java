@@ -6,17 +6,16 @@ import java.util.Objects;
 
 public class BitReader {
 
-    private final InputStream is;
+    private InputStream is;
     private int bitPtr = 0;
     private int currentByte;
 
     public BitReader(InputStream is) {
         Objects.requireNonNull(is, "Input Stream cannot be null");
         this.is = is;
-        readByte();
     }
 
-    public int readBits(int bitsNumber) {
+    public int readBits(int bitsNumber) throws IOException {
         if(bitsNumber <= 0 || bitsNumber > 16) {
             throw new IllegalStateException("Number or read bits should be in range (0, 16)");
         }
@@ -44,14 +43,23 @@ public class BitReader {
         return acc;
     }
 
-    private void readByte() {
-        try {
-            currentByte = is.read();
-            if (currentByte == -1) {
-                throw new IOException("Unexpected end of input");
-            }
-        } catch (IOException ioe) {
-            throw new RuntimeException("Cannot read next byte from input stream");
+    public void readByte() throws IOException {
+        currentByte = is.read();
+        if (currentByte == -1) {
+            throw new IOException("Unexpected end of input");
         }
+    }
+
+    public void set(int currentByte, int bytePtr) {
+        this.currentByte = currentByte;
+        this.bitPtr = bytePtr;
+    }
+
+    public int getBitPtr() {
+        return bitPtr;
+    }
+
+    public int getCurrentByte() {
+        return currentByte;
     }
 }

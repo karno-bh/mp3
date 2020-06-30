@@ -7,10 +7,12 @@ import java.util.Objects;
 public class MPEG1AudioDecoder {
 
     private final InputStream inputStream;
+    private final BitReader bitReader;
 
     public MPEG1AudioDecoder(InputStream inputStream) {
         Objects.requireNonNull(inputStream, "Input stream should not be null");
         this.inputStream = inputStream;
+        this.bitReader = new BitReader(inputStream);
     }
 
     public short[] findHeader(short[] headerStorage) throws IOException {
@@ -35,7 +37,20 @@ public class MPEG1AudioDecoder {
         return header;
     }
 
-    public int findHeader2() throws IOException {
-        return 0;
+    public Header findHeader2(Header headerBuffer) throws IOException {
+        int _byte;
+        Header header = headerBuffer == null ? new Header() : headerBuffer;
+        boolean headerFound = false;
+        while((_byte = inputStream.read()) != -1) {
+            if (_byte == 0xFF) {
+                bitReader.readByte();
+                if (bitReader.readBits(4) != 0x0F) continue;
+                header.parse(bitReader);
+                headerFound = true;
+                break;
+            }
+        }
+        if (headerFound) return header;
+        throw new IOException("Cannot find a valid header in provided input stream");
     }
 }
