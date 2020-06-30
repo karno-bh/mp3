@@ -19,7 +19,7 @@ public class Test00010HeaderReading {
         test00010HeaderReading.test004();
     }
 
-    void test001() {
+    /*void test001() {
         try (InputStream is = new BufferedInputStream(this.getClass().getResourceAsStream("/joint_stereo_kikuo.mp3"))){
             MPEG1AudioDecoder decoder = new MPEG1AudioDecoder(is);
             short[] header = decoder.findHeader(null);
@@ -29,7 +29,7 @@ public class Test00010HeaderReading {
         } catch (IOException e) {
             Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "Error while reading MP3", e);
         }
-    }
+    }*/
 
     void test002() {
         try (InputStream is = new BufferedInputStream(this.getClass().getResourceAsStream("/joint_stereo_kikuo.mp3"))){

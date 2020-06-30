@@ -47,6 +47,9 @@ public class Header {
     public static final int MODE_DUAL_CHANNEL = 0b10;
     public static final int MODE_SINGLE_CHANNEL = 0b11;
 
+    public static final int CRC_CHECK_ADDED = 0;
+    public static final int NO_CRC_CHECK_ADDED = 1;
+
     public static final int PADDING = 1;
     public static final int NO_PADDING = 0;
 

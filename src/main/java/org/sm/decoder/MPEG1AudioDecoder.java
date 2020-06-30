@@ -1,5 +1,7 @@
 package org.sm.decoder;
 
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
@@ -15,7 +17,7 @@ public class MPEG1AudioDecoder {
         this.bitReader = new BitReader(inputStream);
     }
 
-    public short[] findHeader(short[] headerStorage) throws IOException {
+    /*public short[] findHeader(short[] headerStorage) throws IOException {
         int _byte;
         short[] header = headerStorage == null ? new short[4] : headerStorage;
         int i = 0;
@@ -35,7 +37,7 @@ public class MPEG1AudioDecoder {
             }
         }
         return header;
-    }
+    }*/
 
     public Header findHeader2(Header headerBuffer) throws IOException {
         int _byte;
@@ -52,5 +54,19 @@ public class MPEG1AudioDecoder {
         }
         if (headerFound) return header;
         throw new IOException("Cannot find a valid header in provided input stream");
+    }
+
+    public void process() throws IOException {
+        Header headerBuffer = new Header();
+        CrcCheck crcCheckBuffer = new CrcCheck();
+        Header header = findHeader2(headerBuffer);
+        if (header.protectionBit == Header.CRC_CHECK_ADDED) {
+            crcCheckBuffer.parse(bitReader);
+        }
+
+    }
+
+    public CrcCheck readCrc() {
+        return null;
     }
 }
